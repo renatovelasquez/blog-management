@@ -2,6 +2,10 @@
 
 This application provides a small blog management APIs REST, allowing to create, update, and retrieve blogs, besides register comments for the blogs.
 -----
+Para la aplicacion de gestion de BLogs, se utilizó Java 21 y Spring Boot 3 para desarrollar servicios RESTful robustos y
+escalables, con Gradle para la gestión de dependencias y H2 como base de datos ligera en desarrollo. La solución se
+trabajo con Docker para asegurar consistencia en todos los entornos. Siguiendo una arquitectura modular y pruebas
+automatizadas, logrando asi una plicacion eficiente, confiable y fácil de mantener.
 
 ## Requirements:
 
@@ -12,13 +16,6 @@ This application provides a small blog management APIs REST, allowing to create,
 - Docker 25
 - JUnit
 - Currently, only tested on Fedora 39 and IntelliJ IDEA
-
-## Running using Docker Compose:
-
-```bash
-cd blog-management
-docker-compose -f docker-compose.yml up
-```
 
 ## How to run locally:
 
@@ -39,7 +36,7 @@ docker run -p 8080:8080 -t renvl/blog-management
 
 ## Database Design
 
-![blog_management_db.png](src/main/resources/blog-management.png)
+![blog_management.png](src/main/resources/blog-management.png)
 
 Available Blogs
 
@@ -53,7 +50,6 @@ Available Blogs
 ## API:
 
 #### http[]()://localhost:8080/api
-
 
 ## Swagger-ui
 

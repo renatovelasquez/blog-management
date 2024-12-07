@@ -15,7 +15,7 @@ import exceptions.BlogManagementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,7 +68,7 @@ public class BlogServiceImpl implements BlogService {
                 .content(blog.getContent())
                 .periodicity(blog.getPeriodicity())
                 .commentariesEnabled(blog.isCommentariesEnabled())
-                .date(LocalDate.now())
+                .date(LocalDateTime.now())
                 .build();
         blogHistoryRepository.save(blogHistory);
 
@@ -92,11 +92,17 @@ public class BlogServiceImpl implements BlogService {
 
         List<Commentary> commentaries = commentaryRepository.getAllByBlog_BlogCode(blogCode);
 
-        int max = commentaries.stream().mapToInt(Commentary::getScore).max().orElseThrow();
-        int min = commentaries.stream().mapToInt(Commentary::getScore).min().orElseThrow();
-        double average = commentaries.stream().mapToInt(Commentary::getScore).average().orElseThrow();
+        int max = 0;
+        int min = 0;
+        double average = 0;
 
-        return RetrieveBlogResponse.builder()
+        if (!commentaries.isEmpty()) {
+            max = commentaries.stream().mapToInt(Commentary::getScore).max().orElseThrow();
+            min = commentaries.stream().mapToInt(Commentary::getScore).min().orElseThrow();
+            average = commentaries.stream().mapToInt(Commentary::getScore).average().orElseThrow();
+        }
+
+        return RetrieveBlogResponse.builder().blogCode(blog.getBlogCode())
                 .author(author).blog(blog)
                 .commentaries(commentaries)
                 .maxScore(max)

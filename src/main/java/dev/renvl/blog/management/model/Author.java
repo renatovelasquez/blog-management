@@ -1,6 +1,6 @@
 package dev.renvl.blog.management.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -18,7 +18,8 @@ import java.time.LocalDate;
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+    @Schema(hidden = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
     private String name;
     private String firstLastname;

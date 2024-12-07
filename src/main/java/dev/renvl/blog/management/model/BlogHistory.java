@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,6 +25,5 @@ public class BlogHistory {
     private Periodicity periodicity;
     private boolean commentariesEnabled;
     @JsonIgnore
-    @Temporal(TemporalType.DATE)
-    private LocalDate date;
+    private LocalDateTime date;
 }

@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class RetrieveBlogResponse {
+    private String blogCode;
     private Author author;
     private Blog blog;
     private List<Commentary> commentaries;
