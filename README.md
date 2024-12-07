@@ -51,6 +51,81 @@ Available Blogs
 
 #### http[]()://localhost:8080/api
 
+### Blog
+
+#### /api/blog
+
+* `POST` : Create Blog
+
+    ```bash
+    curl --request POST \
+      --url http://localhost:8080/api/blog \
+      --header 'Content-Type: application/json' \
+      --data '{
+        "author": {
+          "name": "string",
+          "firstLastname": "string",
+          "secondLastname": "string",
+          "dateOfBirth": "yyyy-MM-dd",
+          "residenceCountry": "string",
+          "email": "string"
+        },
+        "blog": {
+          "title": "string",
+          "topic": "string",
+          "content": "string",
+          "periodicity": "DAILY",
+          "commentariesEnabled": true
+        }
+      }'
+    ```
+
+#### /api/blog/{blogCode}
+
+* `GET` : Retrieve Blog
+
+### Author
+
+#### /api/author
+
+* `POST` : Create Author
+
+    ```bash
+    curl --request POST \
+    --url http://localhost:8080/api/author \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "name": "string",
+      "firstLastname": "string",
+      "secondLastname": "string",
+      "dateOfBirth": "yyyy-MM-dd",
+      "residenceCountry": "string",
+      "email": "string"
+    }'
+    ```
+
+### Commentary
+
+#### /api/commentary
+
+* `POST` : Create Commentary
+
+    ```bash
+    curl --request POST \
+    --url http://localhost:8080/api/commentary \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "blogCode": "string",
+      "commentary": {
+        "commentary": "string",
+        "name": "string",
+        "residenceCountry": "string",
+        "email": "string",
+        "score": 10
+      }
+    }'
+    ```
+
 ## Swagger-ui
 
 http://localhost:8080/swagger-ui/index.html Swagger-UI formatted documentation.
