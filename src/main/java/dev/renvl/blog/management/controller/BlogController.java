@@ -97,6 +97,7 @@ public class BlogController {
             description = "Retrieve Blog object by specifying its values. The response is Blog object")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Blog.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @GetMapping("/{blogCode}")
     @ResponseStatus(HttpStatus.OK)
@@ -106,6 +107,9 @@ public class BlogController {
         try {
             RetrieveBlogResponse response = blogService.retrieveBlog(blogCode);
             return ResponseEntity.status(httpStatus).body(response);
+        } catch (BlogManagementException e) {
+            httpStatus = HttpStatus.NOT_FOUND;
+            messages.add(e.getMessage());
         } catch (Exception e) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             messages.add(e.getMessage());
