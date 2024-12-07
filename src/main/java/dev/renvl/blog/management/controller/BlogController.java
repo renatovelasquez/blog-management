@@ -1,7 +1,10 @@
 package dev.renvl.blog.management.controller;
 
+import dev.renvl.blog.management.dto.CreateBlogRequest;
+import dev.renvl.blog.management.dto.CreateBlogResponse;
 import dev.renvl.blog.management.dto.MessageResponseDto;
 import dev.renvl.blog.management.model.Blog;
+import dev.renvl.blog.management.model.BlogHistory;
 import dev.renvl.blog.management.service.BlogService;
 import exceptions.BlogManagementException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,12 +42,12 @@ public class BlogController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createBlog(@Valid @RequestBody Blog request) {
+    public ResponseEntity<?> createBlog(@Valid @RequestBody CreateBlogRequest request) {
         Set<String> messages = new HashSet<>();
         HttpStatus httpStatus = HttpStatus.CREATED;
         try {
-            Blog blog = blogService.createBlog(request);
-            return ResponseEntity.status(httpStatus).body(blog);
+            CreateBlogResponse response = blogService.createBlog(request);
+            return ResponseEntity.status(httpStatus).body(response);
         } catch (BlogManagementException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
             messages.add(e.getMessage());
@@ -68,11 +71,11 @@ public class BlogController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> updateBlog(@Valid @RequestBody Blog updateBlogRequest) {
+    public ResponseEntity<?> updateBlog(@Valid @RequestBody BlogHistory request) {
         Set<String> messages = new HashSet<>();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            Blog blog = blogService.updateBlog(updateBlogRequest);
+            Blog blog = blogService.updateBlog(request);
             return ResponseEntity.status(httpStatus).body(blog);
         } catch (BlogManagementException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
@@ -94,13 +97,13 @@ public class BlogController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Blog.class), mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
-    @GetMapping("/{code}")
+    @GetMapping("/{blogCode}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> retrieveBlog(@PathVariable("code") String code) {
+    public ResponseEntity<?> retrieveBlog(@PathVariable("blogCode") String blogCode) {
         Set<String> messages = new HashSet<>();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            Blog blog = blogService.getBlog(code);
+            Blog blog = blogService.getBlog(blogCode);
             return ResponseEntity.status(httpStatus).body(blog);
         } catch (Exception e) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;

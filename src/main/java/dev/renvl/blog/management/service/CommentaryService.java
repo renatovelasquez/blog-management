@@ -1,7 +1,7 @@
 package dev.renvl.blog.management.service;
 
-import dev.renvl.blog.management.model.Commentary;
+import dev.renvl.blog.management.dto.AddCommentaryDTO;
 
 public interface CommentaryService {
-    Commentary addCommentary(Commentary request);
+    AddCommentaryDTO addCommentary(AddCommentaryDTO request);
 }
