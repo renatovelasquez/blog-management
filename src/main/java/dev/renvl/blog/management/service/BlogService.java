@@ -2,6 +2,7 @@ package dev.renvl.blog.management.service;
 
 import dev.renvl.blog.management.dto.CreateBlogRequest;
 import dev.renvl.blog.management.dto.CreateBlogResponse;
+import dev.renvl.blog.management.dto.RetrieveBlogResponse;
 import dev.renvl.blog.management.model.Blog;
 import dev.renvl.blog.management.model.BlogHistory;
 
@@ -12,7 +13,7 @@ public interface BlogService {
 
     Blog updateBlog(BlogHistory request);
 
-    Blog getBlog(String code);
+    RetrieveBlogResponse retrieveBlog(String code);
 
-    List<Blog> retrieveBlogs();
+    List<RetrieveBlogResponse> retrieveBlogs();
 }

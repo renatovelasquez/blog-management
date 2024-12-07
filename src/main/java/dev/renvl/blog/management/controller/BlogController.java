@@ -3,6 +3,7 @@ package dev.renvl.blog.management.controller;
 import dev.renvl.blog.management.dto.CreateBlogRequest;
 import dev.renvl.blog.management.dto.CreateBlogResponse;
 import dev.renvl.blog.management.dto.MessageResponseDto;
+import dev.renvl.blog.management.dto.RetrieveBlogResponse;
 import dev.renvl.blog.management.model.Blog;
 import dev.renvl.blog.management.model.BlogHistory;
 import dev.renvl.blog.management.service.BlogService;
@@ -103,8 +104,8 @@ public class BlogController {
         Set<String> messages = new HashSet<>();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            Blog blog = blogService.getBlog(blogCode);
-            return ResponseEntity.status(httpStatus).body(blog);
+            RetrieveBlogResponse response = blogService.retrieveBlog(blogCode);
+            return ResponseEntity.status(httpStatus).body(response);
         } catch (Exception e) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             messages.add(e.getMessage());
@@ -129,8 +130,8 @@ public class BlogController {
         Set<String> messages = new HashSet<>();
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            List<Blog> blogs = blogService.retrieveBlogs();
-            return ResponseEntity.status(httpStatus).body(blogs);
+            List<RetrieveBlogResponse> response = blogService.retrieveBlogs();
+            return ResponseEntity.status(httpStatus).body(response);
         } catch (Exception e) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             messages.add(e.getMessage());

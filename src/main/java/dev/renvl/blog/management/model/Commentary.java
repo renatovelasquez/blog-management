@@ -23,9 +23,9 @@ public class Commentary {
     @Email
     @NotBlank(message = "email must not be blank")
     private String email;
-    @Max(message = "Max punctuation must not be greater than 10", value = 10)
-    @Min(message = "Min punctuation must not be lower than 0", value = 0)
-    private int punctuation;
+    @Max(message = "Max score must not be greater than 10", value = 10)
+    @Min(message = "Min score must not be lower than 0", value = 0)
+    private int score;
     @JsonIgnore
     @ManyToOne
     @JoinColumn

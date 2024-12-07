@@ -2,17 +2,21 @@ package dev.renvl.blog.management.service;
 
 import dev.renvl.blog.management.dto.CreateBlogRequest;
 import dev.renvl.blog.management.dto.CreateBlogResponse;
+import dev.renvl.blog.management.dto.RetrieveBlogResponse;
 import dev.renvl.blog.management.model.Author;
 import dev.renvl.blog.management.model.Blog;
 import dev.renvl.blog.management.model.BlogHistory;
+import dev.renvl.blog.management.model.Commentary;
 import dev.renvl.blog.management.repository.AuthorRepository;
 import dev.renvl.blog.management.repository.BlogHistoryRepository;
 import dev.renvl.blog.management.repository.BlogRepository;
+import dev.renvl.blog.management.repository.CommentaryRepository;
 import exceptions.BlogManagementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,18 +26,16 @@ public class BlogServiceImpl implements BlogService {
 
     private final BlogRepository blogRepository;
     private final AuthorRepository authorRepository;
+    private final CommentaryRepository commentaryRepository;
     private final BlogHistoryRepository blogHistoryRepository;
 
-    public BlogServiceImpl(BlogRepository blogRepository, AuthorRepository authorRepository, BlogHistoryRepository blogHistoryRepository) {
+    public BlogServiceImpl(BlogRepository blogRepository, AuthorRepository authorRepository, CommentaryRepository commentaryRepository, BlogHistoryRepository blogHistoryRepository) {
         this.blogRepository = blogRepository;
         this.authorRepository = authorRepository;
+        this.commentaryRepository = commentaryRepository;
         this.blogHistoryRepository = blogHistoryRepository;
     }
 
-    /**
-     * @param request
-     * @return
-     */
     @Override
     @Transactional
     public CreateBlogResponse createBlog(CreateBlogRequest request) {
@@ -51,10 +53,6 @@ public class BlogServiceImpl implements BlogService {
         return CreateBlogResponse.builder().blogCode(blog.getBlogCode()).build();
     }
 
-    /**
-     * @param request
-     * @return
-     */
     @Override
     @Transactional
     public Blog updateBlog(BlogHistory request) {
@@ -83,20 +81,38 @@ public class BlogServiceImpl implements BlogService {
         return blogRepository.save(blog);
     }
 
-    /**
-     * @param blogCode
-     * @return
-     */
     @Override
-    public Blog getBlog(String blogCode) {
-        return null;
+    public RetrieveBlogResponse retrieveBlog(String blogCode) {
+        Blog blog = blogRepository
+                .findBlogByBlogCode(blogCode)
+                .orElseThrow(() -> new BlogManagementException("Blog not found."));
+
+        Author author = authorRepository.findById(blog.getAuthor().getId())
+                .orElseThrow(() -> new BlogManagementException("Author not found."));
+
+        List<Commentary> commentaries = commentaryRepository.getAllByBlog_BlogCode(blogCode);
+
+        int max = commentaries.stream().mapToInt(Commentary::getScore).max().orElseThrow();
+        int min = commentaries.stream().mapToInt(Commentary::getScore).min().orElseThrow();
+        double average = commentaries.stream().mapToInt(Commentary::getScore).average().orElseThrow();
+
+        return RetrieveBlogResponse.builder()
+                .author(author).blog(blog)
+                .commentaries(commentaries)
+                .maxScore(max)
+                .minScore(min)
+                .avgScore(average)
+                .build();
     }
 
-    /**
-     * @return
-     */
     @Override
-    public List<Blog> retrieveBlogs() {
-        return List.of();
+    public List<RetrieveBlogResponse> retrieveBlogs() {
+        List<Blog> blogs = blogRepository.findAll();
+        List<RetrieveBlogResponse> responseList = new ArrayList<>();
+        for (Blog blog : blogs) {
+            RetrieveBlogResponse response = retrieveBlog(blog.getBlogCode());
+            responseList.add(response);
+        }
+        return responseList;
     }
 }
